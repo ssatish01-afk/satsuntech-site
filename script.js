@@ -14,3 +14,32 @@ if (toggleButton && navLinks) {
     });
   });
 }
+
+const revealTargets = document.querySelectorAll(
+  ".section-grid, .section-heading, .product-card, .feature-card, .callout-card, .contact-card, .legal-copy"
+);
+
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (!prefersReducedMotion && revealTargets.length) {
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.14,
+      rootMargin: "0px 0px -40px 0px",
+    }
+  );
+
+  revealTargets.forEach((target, index) => {
+    target.classList.add("reveal-on-scroll");
+    target.style.transitionDelay = `${Math.min(index * 60, 220)}ms`;
+    revealObserver.observe(target);
+  });
+}
