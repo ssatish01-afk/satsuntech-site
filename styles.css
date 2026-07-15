@@ -361,14 +361,28 @@ img {
 
 .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-  will-change: opacity, transform;
+  transform: translateY(28px) scale(0.985);
+  filter: blur(8px);
+  transition: opacity 0.75s ease, transform 0.75s ease, filter 0.75s ease;
+  will-change: opacity, transform, filter;
 }
 
 .reveal-on-scroll.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.reveal-up-soft {
+  transform: translateY(34px) scale(0.985);
+}
+
+.reveal-from-left {
+  transform: translateX(-34px) translateY(18px) scale(0.985);
+}
+
+.reveal-from-right {
+  transform: translateX(34px) translateY(18px) scale(0.985);
 }
 
 .section-soft {
@@ -418,6 +432,24 @@ img {
   transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
 }
 
+.product-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0) 34%,
+      rgba(255, 255, 255, 0.7) 50%,
+      rgba(255, 255, 255, 0) 66%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  transform: translateX(-140%);
+  opacity: 0;
+  pointer-events: none;
+}
+
 .product-card::after {
   content: "";
   position: absolute;
@@ -437,6 +469,15 @@ img {
 
 .product-card:hover::after {
   opacity: 1;
+}
+
+.product-card.reveal-on-scroll {
+  transform: translateY(34px) scale(0.97);
+}
+
+.product-card.reveal-on-scroll.is-visible::before {
+  opacity: 1;
+  animation: card-sheen 0.9s ease 0.08s forwards;
 }
 
 .product-kicker {
@@ -586,6 +627,22 @@ img {
   }
 }
 
+@keyframes card-sheen {
+  0% {
+    transform: translateX(-140%);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translateX(140%);
+    opacity: 0;
+  }
+}
+
 @media (max-width: 980px) {
   .hero-grid,
   .section-grid,
@@ -622,6 +679,7 @@ img {
   .reveal-on-scroll {
     opacity: 1;
     transform: none;
+    filter: none;
     transition: none;
   }
 }
@@ -662,6 +720,26 @@ img {
 }
 
 @media (max-width: 560px) {
+  .reveal-on-scroll {
+    transition-duration: 0.68s;
+  }
+
+  .reveal-up-soft {
+    transform: translateY(36px) scale(0.985);
+  }
+
+  .reveal-from-left {
+    transform: translateX(-26px) translateY(22px) scale(0.985);
+  }
+
+  .reveal-from-right {
+    transform: translateX(26px) translateY(22px) scale(0.985);
+  }
+
+  .product-card.reveal-on-scroll {
+    transform: translateY(38px) scale(0.965);
+  }
+
   .product-grid,
   .feature-grid {
     grid-template-columns: 1fr;
@@ -699,6 +777,7 @@ img {
   .reveal-on-scroll {
     opacity: 1;
     transform: none;
+    filter: none;
     transition: none;
   }
 }

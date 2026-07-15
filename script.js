@@ -22,6 +22,8 @@ const revealTargets = document.querySelectorAll(
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 if (!prefersReducedMotion && revealTargets.length) {
+  const isMobileViewport = window.matchMedia("(max-width: 560px)").matches;
+
   const revealObserver = new IntersectionObserver(
     (entries, observer) => {
       entries.forEach((entry) => {
@@ -39,7 +41,19 @@ if (!prefersReducedMotion && revealTargets.length) {
 
   revealTargets.forEach((target, index) => {
     target.classList.add("reveal-on-scroll");
-    target.style.transitionDelay = `${Math.min(index * 60, 220)}ms`;
+
+    const isCard =
+      target.classList.contains("product-card") ||
+      target.classList.contains("feature-card");
+
+    if (isMobileViewport && isCard) {
+      target.classList.add(index % 2 === 0 ? "reveal-from-left" : "reveal-from-right");
+    } else {
+      target.classList.add("reveal-up-soft");
+    }
+
+    const staggerDelay = isMobileViewport && isCard ? 90 : 60;
+    target.style.transitionDelay = `${Math.min(index * staggerDelay, 280)}ms`;
     revealObserver.observe(target);
   });
 }
